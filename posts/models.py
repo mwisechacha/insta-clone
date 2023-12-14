@@ -30,11 +30,6 @@ class Follow(models.Model):
     followers = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
     following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
 
-class Story(models.Model):
-    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='story_following')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
-
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

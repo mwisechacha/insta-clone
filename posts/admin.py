@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from . import models
+from .models import Like, Follow, Comment
 
 # Register your models here.
 class PostImageInline(admin.TabularInline):
@@ -21,3 +22,7 @@ class PostAdmin(admin.ModelAdmin):
         css = {
             'all':['posts/styles.css']
         }
+
+admin.site.register(Like)
+admin.site.register(Follow)
+admin.site.register(Comment)
