@@ -10,6 +10,7 @@ class Post(models.Model):
     posted_at = models.DateTimeField(auto_now_add=True)
     likes = models.PositiveSmallIntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
 
     # def __str__(self) -> str:
     #     return super().__str__()
@@ -34,13 +35,13 @@ class Follow(models.Model):
     following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return self.user
+        return self.user.username
     
     class Meta:
         ordering = ['created_at']
