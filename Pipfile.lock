@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7476eeb4948984425b24224272a59b77a8af5d22bdfcf5e9d8ebebe0a7f22ea8"
+            "sha256": "6b59d3786e6abfde5a61c0bb7e4ffc508f0bd28da6b9fe058bedd6ac7dedb499"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,6 +31,38 @@
             ],
             "index": "pypi",
             "version": "==5.0"
+        },
+        "django-filter": {
+            "hashes": [
+                "sha256:67583aa43b91fe8c49f74a832d95f4d8442be628fd4c6d65e9f811f5153a4e5c",
+                "sha256:99122a201d83860aef4fe77758b69dda913e874cc5e0eaa50a86b0b18d708400"
+            ],
+            "index": "pypi",
+            "version": "==23.5"
+        },
+        "djangorestframework": {
+            "hashes": [
+                "sha256:579a333e6256b09489cbe0a067e66abe55c6595d8926be6b99423786334350c8",
+                "sha256:eb63f58c9f218e1a7d064d17a70751f528ed4e1d35547fdade9aaf4cd103fd08"
+            ],
+            "index": "pypi",
+            "version": "==3.14.0"
+        },
+        "drf-nested-routers": {
+            "hashes": [
+                "sha256:01aa556b8c08608bb74fb34f6ca065a5183f2cda4dc0478192cc17a2581d71b0",
+                "sha256:996b77f3f4dfaf64569e7b8f04e3919945f90f95366838ca5b8bed9dd709d6c5"
+            ],
+            "index": "pypi",
+            "version": "==0.93.4"
+        },
+        "markdown": {
+            "hashes": [
+                "sha256:5874b47d4ee3f0b14d764324d2c94c03ea66bee56f2d929da9f2508d65e722dc",
+                "sha256:b65d7beb248dc22f2e8a31fb706d93798093c308dc1aba295aedeb9d41a813bd"
+            ],
+            "index": "pypi",
+            "version": "==3.5.1"
         },
         "mysqlclient": {
             "hashes": [
@@ -106,6 +138,13 @@
             ],
             "index": "pypi",
             "version": "==10.1.0"
+        },
+        "pytz": {
+            "hashes": [
+                "sha256:7b4fddbeb94a1eba4b557da24f19fdf9db575192544270a9101d8509f9f43d7b",
+                "sha256:ce42d816b81b68506614c11e8937d3aa9e41007ceb50bfdcb0749b921bf646c7"
+            ],
+            "version": "==2023.3.post1"
         },
         "sqlparse": {
             "hashes": [

@@ -14,6 +14,9 @@ class Post(models.Model):
     # def __str__(self) -> str:
     #     return super().__str__()
 
+    def liked_users(self):
+        return Like.objects.filter(post=self).values_list('user__username', flat=True)
+
     class Meta:
         ordering = ['posted_at']
 
