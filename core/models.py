@@ -6,7 +6,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     phone = models.CharField(max_length=255)
     birth_date = models.DateField(null=True, blank=True)
     bio = models.TextField()
