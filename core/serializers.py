@@ -11,6 +11,7 @@ class UserSerializer(BaseUserSerializer):
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Profile
-        fields = ['user', 'phone', 'birth_date', 'bio', 'pronouns']
+        fields = ['user_id','phone', 'birth_date', 'bio', 'pronouns']
