@@ -37,7 +37,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
-    images = PostImageSerializer(many=True, read_only=True)
+    images = PostImageSerializer(many=True)
     liked_by = serializers.SerializerMethodField()
     comments = CommentSerializer(many=True, read_only=True)
     username = UserField(source='user')
