@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet, GenericViewSet
 from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .serializers import PostSerializer, PostImageSerializer, LikeSerializer, CommentSerializer
@@ -91,10 +92,20 @@ class LikeViewSet(ReadOnlyModelViewSet):
     
 class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
-    permission_class = [IsAdminOrReadOnly]
+    permission_class = [IsOwnerOrReadOnly]
 
     def get_queryset(self):
         return Comment.objects.filter(post_id=self.kwargs['post_pk'])
     
     def get_serializer_context(self):
         return {'post_id': self.kwargs['post_pk']}
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

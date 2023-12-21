@@ -3,6 +3,9 @@ from .models import Post, PostImage, Like, Comment
 
 
 class UserField(serializers.Field):
+    def to_internal_value(self, data):
+        pass
+
     def to_representation(self, value):
         return value.username if value else None
     
@@ -31,6 +34,7 @@ class CommentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         post_id = self.context['post_id']
         return Comment.objects.create(post_id=post_id, **validated_data)
+    
     class Meta:
         model = Comment
         fields = ['id', 'body', 'username']
@@ -38,8 +42,9 @@ class CommentSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     images = PostImageSerializer(many=True, read_only=True)
+    likes = serializers.IntegerField(read_only=True)
     liked_by = serializers.SerializerMethodField()
-    comments = CommentSerializer(many=True)
+    comments = CommentSerializer(many=True, read_only=True)
     user_id = serializers.IntegerField(read_only=True)
 
     def get_liked_by(self, obj):
