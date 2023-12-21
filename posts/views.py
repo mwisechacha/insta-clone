@@ -1,8 +1,11 @@
 from django.shortcuts import render, HttpResponse
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet, GenericViewSet
 from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, DestroyModelMixin
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from .serializers import PostSerializer, PostImageSerializer, LikeSerializer, CommentSerializer
-from .permissions import IsAdminOrReadOnly
+from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .models import Post, PostImage, Like, Comment
 
 # Create your views here.
@@ -12,8 +15,62 @@ def index(request):
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.prefetch_related('images').all()
     serializer_class = PostSerializer
-    permission_classes =[IsAdminOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
+    def get_permissions(self):
+        if self.action == 'update':
+            permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['POST'], permission_classes=[IsAuthenticated])
+    def like_post(self, request, pk=None):
+        post = self.get_object()
+        (like, created) = Like.objects.get_or_create(post=post, user=request.user)
+        if created:
+            post.likes += 1
+            post.save()
+        serializer = LikeSerializer(like)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['POST'], permission_classes=[IsAuthenticated])
+    def unlike_post(self, request, pk=None):
+        post = self.get_object()
+        try:
+            like = Like.objects.get(post=post, user=request.user)
+            like.delete()
+            post.likes -= 1
+            post.save()
+            return Response(status=204)
+        except Like.DoesNotExist:
+            return Response(status=404)
+        
+    @action(detail=True, methods=['POST'], permission_classes=[IsAuthenticated])
+    def comment_post(self, request, pk=None):
+        post = self.get_object()
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user, post=post)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+        
+    @action(detail=True, methods=['POST'], permission_classes=[IsAuthenticated])
+    def uncomment_post(self, request, pk=None):
+        post = self.get_object()
+        try:
+            comment = Comment.objects.get(post=post, user=request.user)
+            comment.delete()
+            return Response(status=204)
+        except Comment.DoesNotExist:
+            return Response(status=404)
+        
 class PostImageViewSet(ModelViewSet):
     serializer_class = PostImageSerializer
 

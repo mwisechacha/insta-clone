@@ -37,17 +37,17 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
-    images = PostImageSerializer(many=True)
+    images = PostImageSerializer(many=True, read_only=True)
     liked_by = serializers.SerializerMethodField()
-    comments = CommentSerializer(many=True, read_only=True)
-    username = UserField(source='user')
+    comments = CommentSerializer(many=True)
+    user_id = serializers.IntegerField(read_only=True)
 
     def get_liked_by(self, obj):
         return obj.liked_users()
     
     class Meta:
         model = Post
-        fields = ['id', 'caption', 'images','username', 'likes', 'liked_by', 'comments']
+        fields = ['id', 'caption', 'images','user_id', 'likes', 'liked_by', 'comments']
 
 
 
