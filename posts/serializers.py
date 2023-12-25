@@ -57,3 +57,9 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['id', 'caption', 'images','user', 'likes', 'liked_by', 'comments']
         extra_kwargs = {'user': {'read_only': True}}
+
+class UpdatePostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['caption']
+    

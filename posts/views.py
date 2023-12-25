@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .serializers import PostSerializer, PostImageSerializer, LikeSerializer, CommentSerializer
+from .serializers import PostSerializer, PostImageSerializer, LikeSerializer, CommentSerializer, UpdatePostSerializer
 from .permissions import IsOwnerOrReadOnly
 from .models import Post, PostImage, Like, Comment
 
@@ -16,13 +16,25 @@ def index(request):
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.prefetch_related('images').all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
+    def get_permissions(self):
+        if self.request.method in ['PATCH', 'DELETE', 'POST']:
+            return [IsAuthenticated(), IsOwnerOrReadOnly()]
+        return [IsOwnerOrReadOnly()]
+    
+    def get_serializer_class(self):
+        if self.request.method == 'PATCH':
+            return UpdatePostSerializer
+        return PostSerializer
+    
 
     def get_serializer_context(self):
         return {'request': self.request}
 
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)
+    
         
 class PostImageViewSet(ModelViewSet):
     serializer_class = PostImageSerializer
