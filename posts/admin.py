@@ -3,8 +3,10 @@ from django.contrib import admin
 from django.utils.html import format_html
 from . import models
 from .models import Like, Follow, Comment
+from .admin_mixin import PrepopulateAndDisableUserMixin
 
 # Register your models here.
+
 class PostImageInline(admin.TabularInline):
     model = models.PostImage
     readonly_fields = ['thumbnail']
@@ -15,32 +17,24 @@ class PostImageInline(admin.TabularInline):
         return ''
 
 @admin.register(models.Post)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(PrepopulateAndDisableUserMixin, admin.ModelAdmin):
     list_per_page = 10
     inlines = [PostImageInline]
 
-    def get_form(self, request, obj=None, **kwargs):
-        form = super(PostAdmin, self).get_form(request, obj, **kwargs)
-        if obj is None:
-            form.base_fields['user'].initial = request.user
-            form.base_fields['user'].disabled = True
-        return form
     class Media:
         css = {
             'all':['posts/styles.css']
         }
 
 @admin.register(models.Comment)
-class CommentAdmin(admin.ModelAdmin):
-    def get_form(self, request, obj=None, **kwargs):
-        form = super(CommentAdmin, self).get_form(request, obj, **kwargs)
-        if obj is None:
-            form.base_fields['user'].initial = request.user
-            form.base_fields['user'].disabled = True
-        return form
+class CommentAdmin(PrepopulateAndDisableUserMixin, admin.ModelAdmin):
+    list_per_page = 10
     
     
+@admin.register(models.Like)
+class LikeAdmin(PrepopulateAndDisableUserMixin, admin.ModelAdmin):
+    list_per_page = 10
 
-admin.site.register(Like)
+
 admin.site.register(Follow)
 

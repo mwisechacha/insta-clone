@@ -45,8 +45,13 @@ class PostImageViewSet(ModelViewSet):
     def get_queryset(self):
         return PostImage.objects.filter(post_id=self.kwargs['post_pk'])
     
-class LikeViewSet(ReadOnlyModelViewSet):
+class LikeViewSet(ModelViewSet):
     serializer_class = LikeSerializer
+
+    def get_permissions(self):
+        if self.request.method in ['PATCH', 'DELETE', 'POST']:
+            return [IsAuthenticated(), IsOwnerOrReadOnly()]
+        return [IsOwnerOrReadOnly()]
 
     def get_serializer_context(self):
         return {'post_id': self.kwargs['post_pk']}
@@ -59,7 +64,12 @@ class LikeViewSet(ReadOnlyModelViewSet):
     
 class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
-    permission_class = [IsOwnerOrReadOnly]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
+    def get_permissions(self):
+        if self.request.method in ['PATCH', 'DELETE', 'POST']:
+            return [IsAuthenticated(), IsOwnerOrReadOnly()]
+        return [IsOwnerOrReadOnly()]
 
     def get_queryset(self):
         return Comment.objects.filter(post_id=self.kwargs['post_pk'])

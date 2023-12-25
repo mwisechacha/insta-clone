@@ -26,7 +26,7 @@ class LikeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Like
-        fields = ['id', 'user']
+        fields = ['id', 'user', 'likes']
         extra_kwargs = {'user': {'read_only': True}}
 
 class CommentSerializer(serializers.ModelSerializer):
