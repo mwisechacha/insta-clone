@@ -8,7 +8,7 @@ router.register('posts', views.PostViewSet, basename='posts')
 
 post_router = routers.NestedDefaultRouter(router, 'posts', lookup='post')
 post_router.register('images', views.PostImageViewSet, basename='post-images')
-post_router.register('likes', views.LikeViewSet, basename='post-likes')
+post_router.register('likes', views.LikeToggleViewSet, basename='post-likes')
 post_router.register('comments', views.CommentViewSet, basename='post-comments')
 
 # URLConf

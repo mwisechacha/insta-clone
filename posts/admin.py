@@ -2,7 +2,7 @@ from typing import Any
 from django.contrib import admin
 from django.utils.html import format_html
 from . import models
-from .models import Like, Follow, Comment
+from .models import Like, Comment
 from .admin_mixin import PrepopulateAndDisableUserMixin
 
 # Register your models here.
@@ -36,5 +36,4 @@ class LikeAdmin(PrepopulateAndDisableUserMixin, admin.ModelAdmin):
     list_per_page = 10
 
 
-admin.site.register(Follow)
 

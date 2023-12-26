@@ -40,7 +40,8 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['id', 'body', 'user']
         extra_kwargs = {'user': {'read_only': True}}
-        
+
+
 
 class PostSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
