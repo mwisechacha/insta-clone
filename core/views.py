@@ -14,10 +14,14 @@ class UserViewSet(ModelViewSet):
     permission_classes = [IsAdminUser]
     lookup_field = 'id'
 
+    def get_serializer_class(self):
+        if self.action == 'me':
+            return UserProfileSerializer
+        return super().get_serializer_class()
 
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
     def me(self, request):
-        (user, created) = Profile.objects.get_or_create(user_id=request.user.id)
+        (user, created) = Profile.objects.get_or_create(user=request.user)
         if request.method == 'GET':
             serializer = UserProfileSerializer(user)
             return Response(serializer.data)
