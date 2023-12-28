@@ -12,7 +12,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     following = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Profile
-        fields = ['user_id','phone', 'birth_date', 'bio', 'pronouns', 'followers', 'following']
+        fields = ['id', 'user_id','phone', 'birth_date', 'bio', 'pronouns', 'followers', 'following']
 
 class UserSerializer(BaseUserSerializer):
     profile = UserProfileSerializer()
