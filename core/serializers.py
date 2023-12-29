@@ -8,11 +8,13 @@ class UserCreateSerializer(BaseUserCreateSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(read_only=True)
-    followers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    following = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    following = serializers.SerializerMethodField()
     class Meta:
         model = Profile
-        fields = ['id', 'user_id','phone', 'profile_picture', 'birth_date', 'bio', 'pronouns', 'followers', 'following']
+        fields = ['id', 'user_id','phone', 'profile_picture', 'birth_date', 'bio', 'pronouns', 'following']
+
+    def get_following(self, obj):
+        return obj.following.count()
 
 class UserSerializer(BaseUserSerializer):
     profile = UserProfileSerializer()

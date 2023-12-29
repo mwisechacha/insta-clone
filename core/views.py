@@ -14,12 +14,12 @@ class UserViewSet(ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsAdminUser]
-    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+    # http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
 
-    def get_permissions(self):
-        if self.request.method in ['PATCH', 'DELETE', 'POST']:
-            return [IsOwnerOrReadOnly()]
-        return [IsAuthenticated()]
+    # def get_permissions(self):
+    #     if self.request.method in ['PATCH', 'DELETE', 'POST']:
+    #         return [IsOwnerOrReadOnly()]
+    #     return [IsAuthenticated()]
 
 
     def get_serializer_class(self):
@@ -27,11 +27,7 @@ class UserViewSet(ModelViewSet):
             return UserProfileSerializer
         return super().get_serializer_class()
     
-    # def retrieve(self, request, *args, **kwargs):
-    #     self.permission_classes = [IsAuthenticated]
-    #     return super().retrieve(request, *args, **kwargs)
-
-
+   
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
     def me(self, request):
         (user, created) = Profile.objects.get_or_create(user=request.user)

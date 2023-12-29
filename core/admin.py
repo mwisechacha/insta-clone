@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from . import models
+from .relationship import Relationship
 from .models import User
 
 # Register your models here.    
@@ -19,3 +20,6 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
+     
+
+admin.site.register(models.Relationship)
